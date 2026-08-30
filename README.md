@@ -18,10 +18,16 @@ Per [mailvalid.io/docs](https://mailvalid.io/docs):
 | `list_bulk_jobs` | free |
 | `cancel_bulk_job` | free |
 | `get_credit_balance` | free |
-| `verify_email_demo` | free, no auth, rate-limited per IP |
+| `verify_email_demo` | free, no auth, rate-limited per IP — see caveat below |
 | `get_api_discovery` | free, no auth |
 
 Get an API key at [mailvalid.io/signup](https://mailvalid.io/signup) — 100 free credits, no card.
+
+> **Do not gate signups on `verify_email_demo`.** It performs syntax, disposable-domain,
+> role-account and free-provider checks only. It does **not** perform a DNS lookup: it
+> synthesises an `mx.<domain>` record and reports `domain_valid: true` / `has_mx: true`
+> even for domains that do not resolve. A nonexistent domain comes back as
+> `status: "valid"` with confidence 85. Use `verify_email` for anything load-bearing.
 
 ## Connect directly (recommended)
 
@@ -76,6 +82,15 @@ npm install
 npm run build
 MAILVALID_API_KEY=mv_live_your_key node dist/index.js
 ```
+
+### Tests
+
+```bash
+npm test            # offline: runs the launcher against an in-process stub MCP server
+npm run test:live   # hits the hosted server and spends credits
+```
+
+`npm run test:live` needs `MAILVALID_API_KEY` set; without it those tests skip.
 
 ## License
 

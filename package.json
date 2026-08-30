@@ -9,13 +9,17 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "pretest": "npm run build",
+    "test": "node --test test/launcher.test.mjs",
+    "test:live": "npm run build && node --test test/live.integration.mjs",
+    "prepublishOnly": "npm run build"
   },
   "keywords": ["mcp", "model context protocol", "email verification", "mailvalid", "claude", "agent tools"],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mailvalid/mailvalid-mcp.git"
+    "url": "git+https://github.com/mailvalid-io/mailvalid-mcp.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0"
